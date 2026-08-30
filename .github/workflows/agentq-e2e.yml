@@ -15,8 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      # API key auth only — no AGENTQ_EMAIL/AGENTQ_PASSWORD needed.
+      # API key auth only — no password needed. AGENTQ_EMAIL is optional
+      # attribution: results show that company member as "Created By".
       AGENTQ_API_KEY: ${{ secrets.AGENTQ_API_KEY }}
+      AGENTQ_EMAIL: ${{ vars.AGENTQ_EMAIL }}
       AGENTQ_PROJECT_ID: ${{ vars.AGENTQ_PROJECT_ID }}
       AGENTQ_TESTRUN_ID: ${{ github.event.inputs.testrun_id || vars.AGENTQ_TESTRUN_ID }}
     steps:

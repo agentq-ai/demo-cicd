@@ -25,6 +25,7 @@ Under **Settings → Secrets and variables → Actions**:
 | Secrets | `AGENTQ_API_KEY` | your AgentQ API key |
 | Variables | `AGENTQ_PROJECT_ID` | your project ID |
 | Variables | `AGENTQ_TESTRUN_ID` | default test run ID |
+| Variables | `AGENTQ_EMAIL` | optional — email of a company member; results show them as "Created By" (needs agentq-playwright ≥ 1.0.69) |
 
 The workflow (`.github/workflows/agentq-e2e.yml`) runs on push to `main`, on pull requests, and manually via **Run workflow** (where you can override the test run ID per run).
 
