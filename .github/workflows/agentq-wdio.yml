@@ -1,0 +1,45 @@
+name: AgentQ E2E WebdriverIO
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      testrun_id:
+        description: 'AgentQ test run ID to report results into (overrides repo variable)'
+        required: false
+
+jobs:
+  wdio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # API key auth only — no password needed. AGENTQ_EMAIL is optional
+      # attribution: results show that company member as "Created By".
+      AGENTQ_API_KEY: ${{ secrets.AGENTQ_API_KEY }}
+      AGENTQ_EMAIL: ${{ vars.AGENTQ_EMAIL }}
+      AGENTQ_PROJECT_ID: ${{ vars.AGENTQ_PROJECT_ID }}
+      AGENTQ_TESTRUN_ID: ${{ github.event.inputs.testrun_id || vars.AGENTQ_TESTRUN_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run WebdriverIO tests (results pushed to AgentQ via API key)
+        run: npm run test:wdio
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wdio-screenshots
+          path: wdio-results/
+          retention-days: 7
+          if-no-files-found: ignore

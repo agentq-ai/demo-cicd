@@ -147,3 +147,6 @@ test-results/
 playwright-report/
 blob-report/
 .playwright/
+
+# WebdriverIO
+wdio-results/

@@ -1,6 +1,13 @@
 # AgentQ CI/CD Demo
 
-Minimal Playwright project showing AgentQ test-result reporting from GitHub Actions using **API key auth only** — no `AGENTQ_EMAIL` / `AGENTQ_PASSWORD` required.
+Minimal Playwright **and WebdriverIO** project showing AgentQ test-result reporting from GitHub Actions using **API key auth only** — no password required.
+
+Two independent workflows report into the same AgentQ test cases (tcIds `1` and `2`), each run adding a history entry:
+
+- `agentq-e2e.yml` — Playwright (`tests/`, via [`agentq-playwright`](https://www.npmjs.com/package/agentq-playwright))
+- `agentq-wdio.yml` — WebdriverIO (`wdio-tests/` + `wdio.conf.ts`, via [`agentq-webdriverio`](https://www.npmjs.com/package/agentq-webdriverio))
+
+Local WebdriverIO run: `npm run test:wdio` (without `AGENTQ_TESTRUN_ID` set, results are not pushed — useful as a dry run).
 
 ## How it works
 
