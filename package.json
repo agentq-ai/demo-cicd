@@ -7,7 +7,7 @@
     "test": "playwright test"
   },
   "dependencies": {
-    "agentq-playwright": "^1.0.68"
+    "agentq-playwright": "^1.0.69"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.1"
