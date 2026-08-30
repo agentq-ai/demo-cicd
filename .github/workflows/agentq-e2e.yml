@@ -1,0 +1,45 @@
+name: AgentQ E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      testrun_id:
+        description: 'AgentQ test run ID to report results into (overrides repo variable)'
+        required: false
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # API key auth only — no AGENTQ_EMAIL/AGENTQ_PASSWORD needed.
+      AGENTQ_API_KEY: ${{ secrets.AGENTQ_API_KEY }}
+      AGENTQ_PROJECT_ID: ${{ vars.AGENTQ_PROJECT_ID }}
+      AGENTQ_TESTRUN_ID: ${{ github.event.inputs.testrun_id || vars.AGENTQ_TESTRUN_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run tests (results pushed to AgentQ via API key)
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
